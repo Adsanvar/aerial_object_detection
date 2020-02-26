@@ -12,3 +12,6 @@ Assist companies in estimation and tracking for different occasions such as:
   - Gather sampling data from Google Maps for model training.
   - Construct a basic algorithm with K-means Clustering.
   
+### Strategy
+- Dectect certain objects inside frame
+  - Crop those objects for futher analysis
