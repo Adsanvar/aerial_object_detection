@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import os
 
 original = cv2.imread('images/08-07-352-007.png')
-
+cpy = np.copy(original)
 ##Kmeans image segmentation
-vectorized = original.reshape((-1, 3))
+vectorized = cpy.reshape((-1, 3))
 vectorized = np.float32(vectorized)
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
 K = 4
 attempts = 10
-img = cv2.cvtColor(original, cv2.COLOR_BGR2RGB)
+img = cv2.cvtColor(cpy, cv2.COLOR_BGR2RGB)
 ret, label, center = cv2.kmeans(vectorized, K, None, criteria, attempts, cv2.KMEANS_PP_CENTERS)
 center = np.uint8(center)
 res = center[label.flatten()]
@@ -42,31 +42,54 @@ cv2.waitKey(0)
 img2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
 #processes the contours and recrops the image to the property size
-counter = 0
+inner = True
 for contour in contours:
     if cv2.contourArea(contour) > 4000:
-        epsilon = 0.01*cv2.arcLength(contour, True)
+        epsilon = 0.0001*cv2.arcLength(contour, True)
         approx = cv2.approxPolyDP(contour, epsilon, True)
-        cv2.drawContours(original, [approx], 0, (0), 3)
+        cv2.drawContours(cpy, [approx], 0, (0), 1)
         x,y = approx[0][0]
+        if inner:
+            cv2.imshow("or", cpy)
+            cv2.waitKey(0)
+            #study masks!!!
+            #https://stackoverflow.com/questions/28759253/how-to-crop-the-internal-area-of-a-contour
+            #https://bytefish.de/blog/extracting_contours_with_opencv/
+            #rect = cv2.minAreaRect(contour)
+            # box = cv2.boxPoints(rect)
+            # ext_left = tuple(approx[approx[:, :, 0].argmin()][0])
+            # ext_right = tuple(approx[approx[:, :, 0].argmax()][0])
+            # ext_top = tuple(approx[approx[:, :, 1].argmin()][0])
+            # ext_bot = tuple(approx[approx[:, :, 1].argmax()][0])
+            #roi == approx
+            # roi_corners = np.array([box], dtype=np.int32)
+            # cv2.polylines(img, roi_corners, 1, (255, 0, 0), 3)
+            # cv2.imshow('image', img)
+            # cv2.waitKey(0)
+            # cropped_image = original[ext_top[1]:ext_bot[1], ext_left[0]:ext_right[0]]
+            # cv2.imwrite('crop{}.jpg'.format('_'+str(1)), cropped_image)
+            # cropped_image = 
+            # cv2.imshow("final?", cropped_image)
+            # cv2.waitKey(0)
 
-        cv2.imshow("or", original)
-        cv2.waitKey(0)
-
-        # counter += 1
+        inner = False
+        
         # rect = cv2.minAreaRect(contour)
         # box = cv2.boxPoints(rect)
-        # ext_left = tuple(contour[contour[:, :, 0].argmin()][0])
-        # ext_right = tuple(contour[contour[:, :, 0].argmax()][0])
-        # ext_top = tuple(contour[contour[:, :, 1].argmin()][0])
-        # ext_bot = tuple(contour[contour[:, :, 1].argmax()][0])
+        # ext_left = tuple(approx[approx[:, :, 0].argmin()][0])
+        # ext_right = tuple(approx[approx[:, :, 0].argmax()][0])
+        # ext_top = tuple(approx[approx[:, :, 1].argmin()][0])
+        # ext_bot = tuple(approx[approx[:, :, 1].argmax()][0])
         # roi_corners = np.array([box], dtype=np.int32)
-
         # cv2.polylines(img, roi_corners, 1, (255, 0, 0), 3)
         # cv2.imshow('image', img)
         # cv2.waitKey(0)
         # cropped_image = original[ext_top[1]:ext_bot[1], ext_left[0]:ext_right[0]]
-        # cv2.imwrite('crop{}.jpg'.format('_'+str(counter)), cropped_image)
+        # cv2.imwrite('crop{}.jpg'.format('_'+str(1)), cropped_image)
+
+
+
+
 
 
 ##Contour Via HSV
