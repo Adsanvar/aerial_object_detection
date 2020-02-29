@@ -16,17 +16,20 @@ def blackToTransparent(name, img):
     rgba = [b,g,r, alpha]
     dst = cv2.merge(rgba,4)
     cv2.imwrite('cropped/{}'.format(name), dst)
+    edited.append(name)
 
-for file in os.listdir('images'):
+main = []
+edited = []
 
+def crop(file, view):
     original = cv2.imread('images/'+file)
     cpy = np.copy(original)
-
+    #main.append(file)
     ##Kmeans image segmentation
     vectorized = cpy.reshape((-1, 3))
     vectorized = np.float32(vectorized)
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-    K = 4
+    K = 5
     attempts = 10
     img = cv2.cvtColor(cpy, cv2.COLOR_BGR2RGB)
     ret, label, center = cv2.kmeans(vectorized, K, None, criteria, attempts, cv2.KMEANS_PP_CENTERS)
@@ -51,7 +54,7 @@ for file in os.listdir('images'):
     gray = cv2.cvtColor(imghsv, cv2.COLOR_RGB2GRAY)
 
     #cv2.imshow("gray", gray)
-    #v2.waitKey(0)
+    #cv2.waitKey(0)
 
     ret, thresh = cv2.threshold(gray, 127, 255, 0)
     #cv2.imshow("tresh", thresh)
@@ -67,7 +70,6 @@ for file in os.listdir('images'):
             epsilon = 0.0001*cv2.arcLength(contour, True)
             approx = cv2.approxPolyDP(contour, epsilon, True)
             cv2.drawContours(cpy, [approx], 0, (0), 1)
-            x,y = approx[0][0]
             if inner:
                 #Black mask
                 mask = np.zeros_like(cpy)
@@ -88,9 +90,26 @@ for file in os.listdir('images'):
                 #roi == approx
                 #Cropping
                 cropped_image = out[ext_top[1]:ext_bot[1], ext_left[0]:ext_right[0]]
-                blackToTransparent(file ,cropped_image)
-                
-
+                if view:
+                    # cv2.imwrite(file, cropped_image)
+                    cv2.imshow(file, cropped_image)
+                    cv2.waitKey(0)
+                else:
+                    blackToTransparent(file, cropped_image)
+            
             inner = False
 
+for file in os.listdir('images'):
+    crop(file, False)
 
+def contains(file):
+    if file in edited:
+        return
+    else:
+        return file
+
+result = map(contains, main)
+print(list(result))
+# for i in result:
+#     if i != None:
+#         crop(i, True)
