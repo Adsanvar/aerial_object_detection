@@ -109,7 +109,10 @@ def contains(file):
         return file
 
 result = map(contains, main)
-print(list(result))
+if len(result) == 0:
+    print("Success")
+else:
+    print("Please view the images and w/ the K means value.\n", list(result))
 # for i in result:
 #     if i != None:
 #         crop(i, True)
