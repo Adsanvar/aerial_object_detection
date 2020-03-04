@@ -22,7 +22,7 @@ main = []
 edited = []
 
 def crop(file, view):
-    original = cv2.imread('images/'+file)
+    original = cv2.imread(file)
     cpy = np.copy(original)
     #main.append(file)
     ##Kmeans image segmentation
@@ -30,20 +30,20 @@ def crop(file, view):
     vectorized = np.float32(vectorized)
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
     K = 5
-    attempts = 10
+    attempts = 11
     img = cv2.cvtColor(cpy, cv2.COLOR_BGR2RGB)
     ret, label, center = cv2.kmeans(vectorized, K, None, criteria, attempts, cv2.KMEANS_PP_CENTERS)
     center = np.uint8(center)
     res = center[label.flatten()]
     #final image
     result_image = res.reshape((img.shape))
-    #cv2.imshow("result", result_image)
-    #cv2.waitKey(0)
+    cv2.imshow("result", result_image)
+    cv2.waitKey(0)
 
     # need to convert to HSV to obtain a darkline from the blue hue
     imghsv = cv2.cvtColor(result_image, cv2.COLOR_BGR2HSV)
-    #cv2.imshow("result_HSV", imghsv)
-    #cv2.waitKey(0)
+    cv2.imshow("result_HSV", imghsv)
+    cv2.waitKey(0)
 
     ##-----------------------------
 
@@ -53,12 +53,12 @@ def crop(file, view):
     #gray image from segmentated image
     gray = cv2.cvtColor(imghsv, cv2.COLOR_RGB2GRAY)
 
-    #cv2.imshow("gray", gray)
-    #cv2.waitKey(0)
+    cv2.imshow("gray", gray)
+    cv2.waitKey(0)
 
     ret, thresh = cv2.threshold(gray, 127, 255, 0)
-    #cv2.imshow("tresh", thresh)
-    #cv2.waitKey(0)
+    cv2.imshow("tresh", thresh)
+    cv2.waitKey(0)
 
     #Finds the contours
     img2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -99,8 +99,12 @@ def crop(file, view):
             
             inner = False
 
-for file in os.listdir('images'):
-    crop(file, False)
+#cropps all images inside a folder
+# for file in os.listdir('images'):
+#     crop('images/'+file, False)
+
+crop('testimage.png', False)
+
 
 def contains(file):
     if file in edited:
@@ -109,7 +113,7 @@ def contains(file):
         return file
 
 result = map(contains, main)
-if len(result) == 0:
+if len(list(result)) == 0:
     print("Success")
 else:
     print("Please view the images and w/ the K means value.\n", list(result))
