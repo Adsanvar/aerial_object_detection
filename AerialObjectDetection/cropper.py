@@ -29,7 +29,7 @@ def crop(file, view):
     vectorized = cpy.reshape((-1, 3))
     vectorized = np.float32(vectorized)
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-    K = 5
+    K = 8
     attempts = 11
     img = cv2.cvtColor(cpy, cv2.COLOR_BGR2RGB)
     ret, label, center = cv2.kmeans(vectorized, K, None, criteria, attempts, cv2.KMEANS_PP_CENTERS)
@@ -103,20 +103,20 @@ def crop(file, view):
 # for file in os.listdir('images'):
 #     crop('images/'+file, False)
 
-crop('testimage.png', False)
+crop('testimage.png', True)
 
 
-def contains(file):
-    if file in edited:
-        return
-    else:
-        return file
+# def contains(file):
+#     if file in edited:
+#         return
+#     else:
+#         return file
 
-result = map(contains, main)
-if len(list(result)) == 0:
-    print("Success")
-else:
-    print("Please view the images and w/ the K means value.\n", list(result))
+# result = map(contains, main)
+# if len(list(result)) == 0:
+#     print("Success")
+# else:
+#     print("Please view the images and w/ the K means value.\n", list(result))
 # for i in result:
 #     if i != None:
 #         crop(i, True)
