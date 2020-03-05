@@ -29,7 +29,7 @@ def crop(file, view):
     vectorized = cpy.reshape((-1, 3))
     vectorized = np.float32(vectorized)
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-    K = 8
+    K = 5
     attempts = 11
     img = cv2.cvtColor(cpy, cv2.COLOR_BGR2RGB)
     ret, label, center = cv2.kmeans(vectorized, K, None, criteria, attempts, cv2.KMEANS_PP_CENTERS)
