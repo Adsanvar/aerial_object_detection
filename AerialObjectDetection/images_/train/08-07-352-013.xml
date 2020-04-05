@@ -1,0 +1,26 @@
+<annotation>
+	<folder>train</folder>
+	<filename>08-07-352-013.png</filename>
+	<path>/Users/adriansandoval/Documents/CSI5130/TensorFlow/workspace/demo/images/train/08-07-352-013.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>351</width>
+		<height>203</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>house</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>66</xmin>
+			<ymin>12</ymin>
+			<xmax>220</xmax>
+			<ymax>177</ymax>
+		</bndbox>
+	</object>
+</annotation>
