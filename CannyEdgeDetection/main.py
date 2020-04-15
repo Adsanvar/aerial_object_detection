@@ -14,8 +14,24 @@ fig.subplots_adjust(bottom=0.25)
 threshold1 = 100
 threshold2 = 100
 
-img = cv2.imread("house_export.png",0)
+#img = cv2.imread("house_export.png",0)
+img = cv2.imread("/Users/adriansandoval/Documents/CSI5130/aerial_object_detection/AerialObjectDetection/cropped/08-07-353-014_test.png")
+#main.append(file)
+#Kmeans image segmentation
+vectorized = img.reshape((-1, 3))
+vectorized = np.float32(vectorized)
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+K = 4
+attempts = 11
+img_1 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+ret, label, center = cv2.kmeans(vectorized, K, None, criteria, attempts, cv2.KMEANS_PP_CENTERS)
+center = np.uint8(center)
+res = center[label.flatten()]
+#final image
+result_image = res.reshape((img_1.shape))
+
 canny = cv2.Canny(img,threshold1,threshold2)
+
 im1 = ax.imshow(canny,'gray')
 
 axcolor = 'lightgoldenrodyellow'
