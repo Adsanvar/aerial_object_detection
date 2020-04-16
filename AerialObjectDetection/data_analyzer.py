@@ -7,6 +7,8 @@ detected_area = pd.read_csv('data/detected_area.csv')
 
 house_percentage = {}
 roof_area = {}
+lawn_area = []
+
 #gets property contour area, roof contour area, and calculates the percentages
 for name in detected_area['Name']:
     
@@ -19,8 +21,10 @@ for name in detected_area['Name']:
 for house in house_percentage:
     r_area = float(property_data.loc[property_data['PIN'] == house, 'Shape.area']) * np.round(house_percentage[house], 3)
     roof_area[house] = np.round(r_area, 3)
-    
+    lawn_area.append(float(property_data.loc[property_data['PIN'] == house, 'Shape.area']) - r_area)
+
 
 df = pd.DataFrame(roof_area.items(), columns=['Property PIN', 'Roof Area'])
+df['Lawn Area'] = lawn_area
 
 df.to_csv('data/predicted_area.csv')
