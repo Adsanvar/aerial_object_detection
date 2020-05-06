@@ -13,4 +13,10 @@ Assist companies in estimation and tracking for different occasions such as:
   - Construct a basic algorithm with K-means Clustering.
   
 ## Progress
+__Data preprocessing:__
+Detect boundary contour
+Crop inside of boundary
+__Modeling:__
 Generated a model to classify houses and create a contour surrounding the house for roof measurement and property distribution.
+__Measurements:__
+Roof Area ~ (Detected Contour Area / Original Contour Area) * Property Area
